@@ -86,7 +86,7 @@ public class SampleController {
 		GridPane grid = new GridPane();
 		grid.setHgap(20);
 		grid.setVgap(20);
-		grid.setPadding(new Insets(120));
+		grid.setPadding(new Insets(80));
 
 		StackPane secondaryLayout = new StackPane();
 		
@@ -118,7 +118,7 @@ public class SampleController {
 		grid.add(accept, 0, 8);
 		grid.add(cancel, 1, 8);
 		
-		newWindow.setTitle("Register Client");
+		newWindow.setTitle("Create Account");
 		newWindow.initModality(Modality.APPLICATION_MODAL);
 		newWindow.setScene(secondScene);
 
@@ -126,7 +126,52 @@ public class SampleController {
 	}
 	
 	public void searchAccount() {
+		Label msg = new Label("Enter the ID of the account:");
 		
+		TextField searchField = new TextField();
+		searchField.setMaxWidth(500);
+		searchField.setPromptText("Enter an ID");
+		
+		Button search = new Button("Search");
+		
+		Stage newWindow = new Stage();
+		Button accept = new Button();
+		accept.setText("Accept");
+		accept.setOnAction(event -> {
+
+			try {
+				
+				newWindow.close();
+			} catch (Exception e2) {
+				System.out.println("Failed to register");
+			}
+		});
+		
+		GridPane grid = new GridPane();
+		grid.setHgap(20);
+		grid.setVgap(20);
+		grid.setPadding(new Insets(50));
+
+		StackPane secondaryLayout = new StackPane();
+		
+		Scene secondScene = new Scene(secondaryLayout, 400, 100);
+
+		Button cancel = new Button();
+		cancel.setText("Cancel");
+		cancel.setOnAction(event -> {
+			newWindow.close();
+		});
+
+		secondaryLayout.getChildren().add(grid);
+		grid.add(msg, 0, 0);
+		grid.add(searchField, 0, 1);
+		grid.add(search, 1, 1);
+		
+		newWindow.setTitle("Search Account");
+		newWindow.initModality(Modality.APPLICATION_MODAL);
+		newWindow.setScene(secondScene);
+
+		newWindow.show();
 	}
 	
 	public void showOutdatedAccounts() {
@@ -254,6 +299,55 @@ public class SampleController {
 	}
 	
 	public void searchClient() {
+		Label msg = new Label("Enter the ID of the user:");
+		
+		TextField searchField = new TextField();
+		searchField.setMaxWidth(500);
+		searchField.setPromptText("Enter an ID");
+		
+		Button search = new Button("Search");
+		
+		Stage newWindow = new Stage();
+		Button accept = new Button();
+		accept.setText("Accept");
+		accept.setOnAction(event -> {
+
+			try {
+				
+				newWindow.close();
+			} catch (Exception e2) {
+				System.out.println("Failed to register");
+			}
+		});
+		
+		GridPane grid = new GridPane();
+		grid.setHgap(20);
+		grid.setVgap(20);
+		grid.setPadding(new Insets(50));
+
+		StackPane secondaryLayout = new StackPane();
+		
+		Scene secondScene = new Scene(secondaryLayout, 400, 100);
+
+		Button cancel = new Button();
+		cancel.setText("Cancel");
+		cancel.setOnAction(event -> {
+			newWindow.close();
+		});
+
+		secondaryLayout.getChildren().add(grid);
+		grid.add(msg, 0, 0);
+		grid.add(searchField, 0, 1);
+		grid.add(search, 1, 1);
+		
+		newWindow.setTitle("Search Client");
+		newWindow.initModality(Modality.APPLICATION_MODAL);
+		newWindow.setScene(secondScene);
+
+		newWindow.show();
+	}
+	
+	public void save() {
 		
 	}
 	

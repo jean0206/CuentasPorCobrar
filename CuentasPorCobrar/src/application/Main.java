@@ -15,7 +15,7 @@ public class Main extends Application {
 			Pane root = (Pane) FXMLLoader.load(getClass().getResource("Sample.fxml"));
 			Scene scene = new Scene(root, 1000, 600);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setTitle("");
+			primaryStage.setTitle("Accounts Receivable");
 //			primaryStage.getIcons().add(new Image("file:data/logo.jpg"));
 			primaryStage.setScene(scene);
 			primaryStage.show();

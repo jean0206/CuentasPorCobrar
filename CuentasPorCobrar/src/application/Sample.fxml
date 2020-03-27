@@ -20,22 +20,22 @@
         <menus>
           <Menu mnemonicParsing="false" text="Administrate Accounts">
             <items>
-              <MenuItem mnemonicParsing="false" text="update account" />
-                  <MenuItem mnemonicParsing="false" onAction="#createAccount" text="create account" />
-                  <MenuItem mnemonicParsing="false" text="search account" />
-                  <MenuItem mnemonicParsing="false" text="show outdated accounts" />
-                  <MenuItem mnemonicParsing="false" text="show no paid accounts" />
-                  <MenuItem mnemonicParsing="false" text="sort accounts by due date" />
-                  <MenuItem mnemonicParsing="false" text="sort accounts by type" />
-                  <MenuItem mnemonicParsing="false" text="show bills" />
+              <MenuItem mnemonicParsing="false" text="Update account" />
+                  <MenuItem mnemonicParsing="false" onAction="#createAccount" text="Create account" />
+                  <MenuItem mnemonicParsing="false" onAction="#searchAccount" text="Search account" />
+                  <MenuItem mnemonicParsing="false" text="Show outdated accounts" />
+                  <MenuItem mnemonicParsing="false" text="Show no paid accounts" />
+                  <MenuItem mnemonicParsing="false" text="Sort accounts by due date" />
+                  <MenuItem mnemonicParsing="false" text="Sort accounts by type" />
+                  <MenuItem mnemonicParsing="false" text="Show bills" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Administrate Clients">
             <items>
-              <MenuItem mnemonicParsing="false" text="show client" />
-                  <MenuItem mnemonicParsing="false" onAction="#registerClient" text="register client" />
-                  <MenuItem mnemonicParsing="false" text="update client" />
-                  <MenuItem mnemonicParsing="false" text="search client" />
+              <MenuItem mnemonicParsing="false" text="Show client" />
+                  <MenuItem mnemonicParsing="false" onAction="#registerClient" text="Register client" />
+                  <MenuItem mnemonicParsing="false" text="Update client" />
+                  <MenuItem mnemonicParsing="false" onAction="#searchClient" text="Search client" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Options">
