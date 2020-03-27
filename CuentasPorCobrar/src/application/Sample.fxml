@@ -1,7 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	
-<?import javafx.scene.layout.BorderPane?>
-	
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
-	<!-- TODO Add Nodes -->
-</BorderPane>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="27.599985504150396" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="373.2000144958496" minHeight="10.0" prefHeight="373.2000144958496" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="Administrate Accounts">
+            <items>
+              <MenuItem mnemonicParsing="false" text="update account" />
+                  <MenuItem mnemonicParsing="false" text="create account" />
+                  <MenuItem mnemonicParsing="false" text="search account" />
+                  <MenuItem mnemonicParsing="false" text="show outdated accounts" />
+                  <MenuItem mnemonicParsing="false" text="show no paid accounts" />
+                  <MenuItem mnemonicParsing="false" text="sort accounts by due date" />
+                  <MenuItem mnemonicParsing="false" text="sort accounts by type" />
+                  <MenuItem mnemonicParsing="false" text="show bills" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Administrate Clients">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <GridPane fx:id="mainPane" GridPane.rowIndex="1">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+      </GridPane>
+   </children>
+</GridPane>
