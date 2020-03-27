@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -21,7 +21,7 @@
           <Menu mnemonicParsing="false" text="Administrate Accounts">
             <items>
               <MenuItem mnemonicParsing="false" text="update account" />
-                  <MenuItem mnemonicParsing="false" text="create account" />
+                  <MenuItem mnemonicParsing="false" onAction="#createAccount" text="create account" />
                   <MenuItem mnemonicParsing="false" text="search account" />
                   <MenuItem mnemonicParsing="false" text="show outdated accounts" />
                   <MenuItem mnemonicParsing="false" text="show no paid accounts" />
@@ -32,9 +32,18 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Administrate Clients">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" text="show client" />
+                  <MenuItem mnemonicParsing="false" onAction="#registerClient" text="register client" />
+                  <MenuItem mnemonicParsing="false" text="update client" />
+                  <MenuItem mnemonicParsing="false" text="search client" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Options">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Save" />
+                  <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
       <GridPane fx:id="mainPane" GridPane.rowIndex="1">
