@@ -17,24 +17,54 @@ public class Client {
 	
 	private String address;
 	
-	private String totalToPay;
+	private double totalToPay;
 	
 	private ArrayList<Account> paidAccounts;
 	
 	private ArrayList<Account> noPaidAccounts;
 
-	public Client(String name, String typeDocument, String idDocument, String email, String phone, String address,
-			String totalToPay) {	
+	public Client(String name, String typeDocument, String idDocument, String email, String phone, String address
+			) {	
 		this.name = name;
 		this.typeDocument = typeDocument;
 		this.idDocument = idDocument;
 		this.email = email;
 		this.phone = phone;
-		this.address = address;
-		this.totalToPay = totalToPay;
+		this.address = address;		
 		this.paidAccounts = new ArrayList<Account>();
 		this.noPaidAccounts = new ArrayList<Account>();
+		this.totalToPay = getTotalToPay();
 		
+	}
+	
+	
+	public void setAccount(long id,Account account) {
+		
+	}
+	
+	public Account searchAccountNoPaid(long id) {
+		Account foundClient=null;
+		for (int i = 0; i < noPaidAccounts.size(); i++) {
+			if(noPaidAccounts.get(i).getId()==id) {
+				foundClient= noPaidAccounts.get(i);
+			}
+		}
+		return foundClient;
+	}
+	
+	public Account searchAccountPaid(long id) {
+		Account foundClient=null;
+		for (int i = 0; i < paidAccounts.size(); i++) {
+			if(paidAccounts.get(i).getId()==id) {
+				foundClient= paidAccounts.get(i);
+			}
+		}
+		return foundClient;
+	}
+	
+	
+	public void addAccount(Account newAccoutn) {
+		noPaidAccounts.add(newAccoutn);
 	}
 
 	public String getName() {
@@ -85,11 +115,16 @@ public class Client {
 		this.address = address;
 	}
 
-	public String getTotalToPay() {
+	public double getTotalToPay() {
+		double total=0;
+		for (int i = 0; i < noPaidAccounts.size(); i++) {
+			total+=noPaidAccounts.get(i).getAccountValue()+noPaidAccounts.get(i).getIva();
+		}
+		this.totalToPay=total;
 		return totalToPay;
 	}
 
-	public void setTotalToPay(String totalToPay) {
+	public void setTotalToPay(double totalToPay) {
 		this.totalToPay = totalToPay;
 	}
 
