@@ -1,5 +1,12 @@
 package modelo;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -7,10 +14,12 @@ import java.util.Hashtable;
 
 import javax.swing.JOptionPane;
 
+
+
 public class AccountsReceivableApp {
 	
 	private Hashtable<String,Client> clients;
-	
+	public static String SERIALHASH = "./hashRecords/hash.dat"; 
 	
 	public AccountsReceivableApp() {
 		
@@ -113,6 +122,40 @@ public class AccountsReceivableApp {
 		Client c2= new Client("nam2", "typeDocument", "124", "email", "phone", "address");
 		c1.updateClient(c2.getIdDocument(),c2);
 		//System.out.println(cli.getName());
+	}
+	//<----------------------------------------SERIALIZACION
+	public void saveFidelization() {
+		try {
+			File fl = new File(SERIALHASH);
+			ObjectOutputStream duct = new ObjectOutputStream(new FileOutputStream(fl));
+			duct.writeObject(clients);
+			duct.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Description: Permite deserializar el programa de fidelizaciones
+	 */
+	public void loadFidelization() {
+		File file = new File(SERIALHASH);
+		Hashtable<String,Client> temporalHash;
+		//Fidelization temporalFidelization;
+		try {
+			FileInputStream fi = new FileInputStream(file);
+			ObjectInputStream co = new ObjectInputStream(fi);
+			temporalHash = (Hashtable<String,Client>) co.readObject();
+			clients = temporalHash; 
+			co.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace(); 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
