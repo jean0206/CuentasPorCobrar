@@ -6,29 +6,32 @@ public class Account {
 	
 	private Date generationDate;
 	
-	private long id;
+	private String id;
 	
 	private Date dueDate;
 	
+	private String description;	
+
+
 	private double accountValue;
 	
 	private double iva;
 	
-	private double interest;
+	
 	
 	private String paymentType;
 	
 	private boolean paid;
 
-	public Account(Date generationDate, long id, Date dueDate, double accountValue, double iva, double interest,
+	public Account(Date generationDate,String description, String id, Date dueDate, double accountValue, double iva, double interest,
 			String paymentType, boolean paid) {
 		super();
 		this.generationDate = generationDate;
 		this.id = id;
+		this.description=description;
 		this.dueDate = dueDate;
 		this.accountValue = accountValue;
-		this.iva = iva;
-		this.interest = interest;
+		this.iva = iva;		
 		this.paymentType = paymentType;
 		this.paid = paid;
 	}
@@ -41,11 +44,11 @@ public class Account {
 		this.generationDate = generationDate;
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -73,13 +76,7 @@ public class Account {
 		this.iva = iva;
 	}
 
-	public double getInterest() {
-		return interest;
-	}
 
-	public void setInterest(double interest) {
-		this.interest = interest;
-	}
 
 	public String getPaymentType() {
 		return paymentType;
@@ -95,6 +92,14 @@ public class Account {
 
 	public void setPaid(boolean paid) {
 		this.paid = paid;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	

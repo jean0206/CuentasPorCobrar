@@ -42,20 +42,20 @@ public class Client {
 		
 	}
 	
-	public Account searchAccountNoPaid(long id) {
+	public Account searchAccountNoPaid(String id) {
 		Account foundClient=null;
 		for (int i = 0; i < noPaidAccounts.size(); i++) {
-			if(noPaidAccounts.get(i).getId()==id) {
+			if(noPaidAccounts.get(i).getId().equals(id)) {
 				foundClient= noPaidAccounts.get(i);
 			}
 		}
 		return foundClient;
 	}
 	
-	public Account searchAccountPaid(long id) {
+	public Account searchAccountPaid(String id) {
 		Account foundClient=null;
 		for (int i = 0; i < paidAccounts.size(); i++) {
-			if(paidAccounts.get(i).getId()==id) {
+			if(paidAccounts.get(i).getId().equals(id)) {
 				foundClient= paidAccounts.get(i);
 			}
 		}

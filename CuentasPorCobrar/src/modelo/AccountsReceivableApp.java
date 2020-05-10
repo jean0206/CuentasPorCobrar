@@ -9,12 +9,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
@@ -57,6 +62,8 @@ public class AccountsReceivableApp {
 		}
 	}
 	
+
+	
 	/*getAccountsNoPaid()
 	 *busca por cada cliente las cuentas no pagadas
 	 * las almacena y retorna en un arrayList
@@ -78,9 +85,23 @@ public class AccountsReceivableApp {
 	}
 	
 	public ArrayList<Account> getOutDateAccounts() {
-		
+		Date dateNow= new Date();
 		ArrayList<Account> outdatesAccounts=new ArrayList<Account>();
-		 	
+		Enumeration e = clients.elements();
+		Client client;
+		while( e.hasMoreElements() ){
+		  client = (Client) e.nextElement();
+		  for (int i = 0; i < client.getNoPaidAccounts().size(); i++) {
+			  Account temporalAccount=client.getNoPaidAccounts().get(i);
+			  if(temporalAccount.isPaid()!=true) {
+				  long diff=(temporalAccount.getDueDate().getTime()-dateNow.getTime());
+				  int days=(int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+				  if(days<0) {
+					  outdatesAccounts.add(temporalAccount);
+				  }
+			  }
+		}
+		}	
 		return outdatesAccounts;
 	}
 	
@@ -107,12 +128,13 @@ public class AccountsReceivableApp {
 	 * luego agrega la cuenta al arraylist de cuentas por pagar del cliente
 	 */
 	
-	public void createAccount(String clientId,Date generationDate, long id, Date dueDate, double accountValue, double iva, double interest,
+	public void createAccount(String clientId,Date generationDate,String description, String id, Date dueDate, double accountValue, double iva, double interest,
 			String paymentType, boolean paid) {
 		Client chosenClient= searchClient(clientId);
-		Account newAccount= new Account(generationDate, id, dueDate, accountValue, iva, interest, paymentType, paid);
+		Account newAccount= new Account(generationDate,description, id, dueDate, accountValue, iva, interest, paymentType, paid);
 		chosenClient.getNoPaidAccounts().add(newAccount);
 		clients.put(clientId, chosenClient);
+		createReceivable(chosenClient, id, accountValue, description);
 		
 	}
 	
@@ -129,6 +151,9 @@ public class AccountsReceivableApp {
 			JOptionPane.showMessageDialog(null,"No se ha encontrado el cliente");
 		}
 	}	
+	
+	
+
 	
 	//<----------------------------------------SERIALIZACION
 	public void saveFidelization() {
@@ -168,10 +193,10 @@ public class AccountsReceivableApp {
 	 * recibe como parametro un cliente y el id de la cuenta
 	 * que se desea buscar, retorna la posicion de la cuenta
 	 */
-	public int searchAccount(Client client, long idCuenta) {
+	public int searchAccount(Client client, String idCuenta) {
 		int counter=0;
 		for (int i = 0; i < client.getNoPaidAccounts().size(); i++) {
-			if(client.getNoPaidAccounts().get(i).getId()==(idCuenta)) {
+			if(client.getNoPaidAccounts().get(i).getId().equals(idCuenta)) {
 				counter=i;
 			}
 		}
@@ -196,11 +221,12 @@ public class AccountsReceivableApp {
 	 * si es menor resta con la cantidad que tiene
 	 */
 	
-	public void paidAccount(String clientId, long  idAccount,double valuePaid) {
+	public void paidAccount(String clientId, String  idAccount,double valuePaid) {
 		Client client= searchClient(clientId);
 		if(client!=null) {
 			int indexAccount=searchAccount(client, idAccount);
 			Account account= client.getNoPaidAccounts().get(indexAccount);
+			double total=account.getAccountValue()+account.getIva();
 			double paidValue=account.getAccountValue()+account.getIva()-valuePaid;
 			if(paidValue<0) {
 				JOptionPane.showMessageDialog(null, "El valor sobrepasa el saldo de la cuenta");
@@ -212,32 +238,57 @@ public class AccountsReceivableApp {
 				client.getNoPaidAccounts().set(indexAccount, account);
 				client.getPaidAccounts().add(account);
 				updateClient(clientId, client);
-				JOptionPane.showMessageDialog(null, "Se ha saldado la cuenta");				
+				JOptionPane.showMessageDialog(null, "Se ha saldado la cuenta");	
+				createQuittance(client, idAccount, total ,paidValue, valuePaid, account.getDescription());
 			}
 			else{
 				account.setAccountValue(paidValue);
 				client.getNoPaidAccounts().set(indexAccount, account);
 				updateClient(clientId, client);
-				JOptionPane.showMessageDialog(null, "Se ha modificado el saldo de la cuenta a: $"+paidValue);				
+				JOptionPane.showMessageDialog(null, "Se ha modificado el saldo de la cuenta a: $"+paidValue);
+				createQuittance(client, idAccount, total ,paidValue, valuePaid, account.getDescription());
 			}
 		}
 		
 	}
 	
-	public void createDocument(String nombre,long idAccount) {		
-		
+	/*createQuittance()
+	 * El metodo crea la factura cuando un cliente paga
+	 * Los valores son el cliente, el total de la cuenta
+	 * el saldo, el total a pagar, la descripcion,
+	 * y el valor pagado por el cliente
+	 */
+	
+	public void createQuittance(Client client,String idAccount,double totalAccount, double balance,double paidValue,String description) {
+				
+		LocalDate date= LocalDate.now();
+		int numQuit= (int) (Math.random()*100+1);
+		//Decimal format establece la cantidad de decimales
+		DecimalFormat df= new DecimalFormat("#.00");
 		try {
 			Document document= new Document();
-			FileOutputStream filePdf= new FileOutputStream("C:\\Users\\jeank\\git\\CuentasPorCobrar1\\CuentasPorCobrar\\bin\\personas.pdf");
+			FileOutputStream filePdf= new FileOutputStream("../CuentasPorCobrar/src/Pagos/"+client.getName()+"_"+idAccount+"_"+numQuit+".pdf");
 			PdfWriter.getInstance(document, filePdf);
 			document.open();
-			Paragraph title= new Paragraph("Recibo de: "+nombre);
+			Paragraph title= new Paragraph("Nombre de cliente: "+client.getName()+"\n"
+					                      +"Numero de identificacion:"+client.getIdDocument()+"\n"
+					                      +"Numero de cuenta: "+idAccount+"\n"
+					                      +"\n");
 			document.add(title);
-			PdfPTable table= new PdfPTable(2);
-			table.addCell("id");
-			table.addCell("nombre");
-			table.addCell("jean");
-			table.addCell("jana");
+			PdfPTable table= new PdfPTable(3);
+			table.addCell("FECHA");			
+			table.addCell("DESCRIPCION");
+			table.addCell("TOTAL A PAGAR");
+			table.addCell(date.toString());			
+			table.addCell(description);
+			table.addCell(""+totalAccount);
+			table.addCell("");			
+			table.addCell("ABONO");
+			table.addCell(""+paidValue);
+			table.addCell("");			
+			table.addCell("SALDO");
+			table.addCell(""+df.format(balance));
+			
 			document.add(table);
 			document.close();
 			
@@ -245,6 +296,44 @@ public class AccountsReceivableApp {
 			// TODO: handle exception
 		}
 	}
+	
+	/*createReceivable()
+	 * 
+	 * 
+	 */
+	
+	public void createReceivable(Client client,String idAccount,double totalAccount,String description) {
+		LocalDate date= LocalDate.now();
+		int numQuit= (int) (Math.random()*100+1);
+		//Decimal format establece la cantidad de decimales
+		DecimalFormat df= new DecimalFormat("#.00");
+		try {
+			Document document= new Document();
+			FileOutputStream filePdf= new FileOutputStream("../CuentasPorCobrar/src/Cuentas/"+client.getName()+"_"+idAccount+"_"+numQuit+".pdf");
+			PdfWriter.getInstance(document, filePdf);
+			document.open();
+			Paragraph title= new Paragraph("Nombre de cliente: "+client.getName()+"\n"
+					                      +"Numero de identificacion:"+client.getIdDocument()+"\n"
+					                      +"Numero de cuenta: "+idAccount+"\n"
+					                      +"\n");
+			document.add(title);
+			PdfPTable table= new PdfPTable(3);
+			table.addCell("FECHA");			
+			table.addCell("DESCRIPCION");
+			table.addCell("TOTAL A PAGAR");
+			table.addCell(date.toString());			
+			table.addCell(description);
+			table.addCell(""+totalAccount);			
+			
+			document.add(table);
+			document.close();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	
 	
 	/*
 	 * Metodos getters and setter de la tabla Hash
@@ -263,16 +352,21 @@ public class AccountsReceivableApp {
 
 	public static void main(String[] args) throws ParseException {
 		AccountsReceivableApp c1= new AccountsReceivableApp();
-		c1.registerClient("nam", "typeDocument", "123", "email", "phone", "address", 230);
-		Client cli= c1.searchClient("123");
-		Date date1=new SimpleDateFormat("dd/M/yyyy").parse("10/05/2020");
-		Date date2=new SimpleDateFormat("dd/M/yyyy").parse("10/06/2020");		
-		c1.createAccount("123",date1, 1, date2, 10000, 0.19, 0.01, "sdfsd", false);
+		c1.registerClient("Jean Carlos Ortiz", "typeDocument", "1010096896", "email", "phone", "address", 230);
+		Client cli= c1.searchClient("1010096896");
+		Date date1=new Date(120,2,4);
+		System.out.println("Prueba"+date1.toString());
+		Date date2=new Date(120,3,4);		
+		
+
+		c1.createAccount("1010096896",date1,"Mercancia vendida sdfdsf sdfsdfsd dfsdfsd dfsdfsdf sdfsdfsdf sdfsdfsdfsd", "1", date2, 10000, 0.19, 0.2, "sdfsd", false);
 		System.out.println(cli.getTotalToPay());
-		c1.paidAccount("123",1,5000.19);
-		cli=c1.searchClient("123");
-		System.out.println(c1.getClients().get("123").getTotalToPay());
-		c1.createDocument("juan",1);
+		System.out.println("Vencidas:"+c1.getOutDateAccounts().size());
+		//c1.paidAccount("1010096896","1",5000.19);		
+		System.out.println(c1.getClients().get("1010096896").getTotalToPay());
+		
+		System.out.println(cli.getTotalToPay());
+		//c1.createDocument(cli,"1");
 		
 		/*Client c2= new Client("nam2", "typeDocument", "124", "email", "phone", "address");
 		c1.updateClient(c2.getIdDocument(),c2);*/
