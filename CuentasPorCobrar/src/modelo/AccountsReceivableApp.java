@@ -129,9 +129,9 @@ public class AccountsReceivableApp {
 	 */
 	
 	public void createAccount(String clientId,Date generationDate,String description, String id, Date dueDate, double accountValue, double iva, double interest,
-			String paymentType, boolean paid) {
+			String paymentType) {
 		Client chosenClient= searchClient(clientId);
-		Account newAccount= new Account(generationDate,description, id, dueDate, accountValue, iva, interest, paymentType, paid);
+		Account newAccount= new Account(generationDate,description, id, dueDate, accountValue, iva, interest, paymentType);
 		chosenClient.getNoPaidAccounts().add(newAccount);
 		clients.put(clientId, chosenClient);
 		createReceivable(chosenClient, id, accountValue, description);
@@ -156,7 +156,7 @@ public class AccountsReceivableApp {
 
 	
 	//<----------------------------------------SERIALIZACION
-	public void saveFidelization() {
+	public void save() {
 		try {
 			File fl = new File(SERIALHASH);
 			ObjectOutputStream duct = new ObjectOutputStream(new FileOutputStream(fl));
@@ -171,7 +171,7 @@ public class AccountsReceivableApp {
 	/**
 	 * Description: Permite deserializar el programa de fidelizaciones
 	 */
-	public void loadFidelization() {
+	public void load() {
 		File file = new File(SERIALHASH);
 		Hashtable<String,Client> temporalHash;
 		//Fidelization temporalFidelization;
@@ -359,7 +359,7 @@ public class AccountsReceivableApp {
 		Date date2=new Date(120,3,4);		
 		
 
-		c1.createAccount("1010096896",date1,"Mercancia vendida sdfdsf sdfsdfsd dfsdfsd dfsdfsdf sdfsdfsdf sdfsdfsdfsd", "1", date2, 10000, 0.19, 0.2, "sdfsd", false);
+//		c1.createAccount("1010096896",date1,"Mercancia vendida sdfdsf sdfsdfsd dfsdfsd dfsdfsdf sdfsdfsdf sdfsdfsdfsd", "1", date2, 10000, 0.19, 0.2, "sdfsd", false);
 		System.out.println(cli.getTotalToPay());
 		System.out.println("Vencidas:"+c1.getOutDateAccounts().size());
 		//c1.paidAccount("1010096896","1",5000.19);		

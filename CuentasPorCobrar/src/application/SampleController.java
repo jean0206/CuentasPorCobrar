@@ -1,24 +1,30 @@
 package application;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import modelo.AccountsReceivableApp;
 
 public class SampleController {
 	
+	AccountsReceivableApp ara = new AccountsReceivableApp();
+	
 	public void initialize() {
-		
+		ara.load();
 	}
 	
 	public void updateAccount() {
@@ -29,6 +35,8 @@ public class SampleController {
 		Label lgenerationDate = new Label("Generation Date");
 
 		Label lid = new Label("ID");
+		
+		Label lclientId = new Label("Client ID");
 
 		Label ldueDate = new Label("Due Date(dd/MM/yyyy)");
 		
@@ -40,7 +48,7 @@ public class SampleController {
 		
 		Label lpaymentType = new Label("Payment Type");
 		
-		Label lpaid = new Label("Paid");
+		Label ldescription = new Label("Description");
 		
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -51,24 +59,43 @@ public class SampleController {
 
 		TextField id = new TextField();
 		id.setMaxWidth(200);
+		
+		TextField clientId = new TextField();
+		clientId.setMaxWidth(200);
 
-		TextField dueDate = new TextField();
+		DatePicker dueDate = new DatePicker();
 		dueDate.setMaxWidth(200);
+		LocalDate ld = dueDate.getValue();
+		String stringDate = ld+"";
+		String[] arraydate = stringDate.split("-");
+		Date auxDate = new Date();
+		int day = Integer.parseInt(arraydate[2]);
+		int month = Integer.parseInt(arraydate[2]);
+		int year = Integer.parseInt(arraydate[2]);
+		auxDate.setDate(day);
+		auxDate.setMonth(month);;
+		auxDate.setYear(year);;
+		
 
 		TextField accountValue = new TextField();
 		accountValue.setMaxWidth(200);
+		double av = Double.parseDouble(accountValue.getText());
 		
 		TextField iva = new TextField();
 		iva.setMaxWidth(200);
+		double iv = Double.parseDouble(iva.getText());
 		
 		TextField interest = new TextField();
 		interest.setMaxWidth(200);
+		double inte = Double.parseDouble(interest.getText());
 		
 		TextField paymentType = new TextField();
 		paymentType.setMaxWidth(200);
 		
-		TextField paid = new TextField();
-		paid.setMaxWidth(200);
+		TextArea description = new TextArea();
+		description.setMaxWidth(200);
+		
+		ara.createAccount(clientId.getText(), date, description.getText(), id.getText(), auxDate, av, iv, inte, paymentType.getText());
 		
 		Stage newWindow = new Stage();
 		Button accept = new Button();
@@ -113,8 +140,8 @@ public class SampleController {
 		grid.add(interest, 1, 5);
 		grid.add(lpaymentType, 0, 6);
 		grid.add(paymentType, 1, 6);
-		grid.add(lpaid, 0, 7);
-		grid.add(paid, 1, 7);
+		grid.add(ldescription, 0, 7);
+		grid.add(description, 1, 7);
 		grid.add(accept, 0, 8);
 		grid.add(cancel, 1, 8);
 		
@@ -201,8 +228,6 @@ public class SampleController {
 	public void registerClient() {
 		Label lname = new Label("Name");
 
-		Label lid = new Label("ID");
-
 		Label ltypeDocument = new Label("Type of document");
 
 		Label lidDocument = new Label("ID Document");
@@ -217,9 +242,6 @@ public class SampleController {
 
 		TextField name = new TextField();
 		name.setMaxWidth(200);
-
-		TextField id = new TextField();
-		id.setMaxWidth(200);
 
 		TextField typeDocument = new TextField();
 		typeDocument.setMaxWidth(200);
@@ -270,8 +292,6 @@ public class SampleController {
 		secondaryLayout.getChildren().add(grid);
 		grid.add(lname, 0, 0);
 		grid.add(name, 1, 0);
-		grid.add(lid, 0, 1);
-		grid.add(id, 1, 1);
 		grid.add(ltypeDocument, 0, 2);
 		grid.add(typeDocument, 1, 2);
 		grid.add(lidDocument, 0, 3);
@@ -352,6 +372,7 @@ public class SampleController {
 	}
 	
 	public void exit() {
+		ara.save();
 		System.exit(0);
 	}
 }

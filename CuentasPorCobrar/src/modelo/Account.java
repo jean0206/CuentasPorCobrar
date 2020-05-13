@@ -24,7 +24,7 @@ public class Account {
 	private boolean paid;
 
 	public Account(Date generationDate,String description, String id, Date dueDate, double accountValue, double iva, double interest,
-			String paymentType, boolean paid) {
+			String paymentType) {
 		super();
 		this.generationDate = generationDate;
 		this.id = id;
@@ -33,7 +33,7 @@ public class Account {
 		this.accountValue = accountValue;
 		this.iva = iva;		
 		this.paymentType = paymentType;
-		this.paid = paid;
+		this.paid = false;
 	}
 
 	public Date getGenerationDate() {
