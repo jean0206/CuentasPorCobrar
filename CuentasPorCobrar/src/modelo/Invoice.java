@@ -1,6 +1,8 @@
 package modelo;
 
-public class Invoice {
+import java.io.Serializable;
+
+public class Invoice  implements Serializable{
 
 	private String clientName;
 	
