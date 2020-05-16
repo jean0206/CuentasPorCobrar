@@ -646,7 +646,6 @@ public class SampleController {
 				grid.add(cancel, 0, 3);
 				
 			} catch (Exception e2) {
-//				JOptionPane.showMessageDialog(null,"The client was not found");
 				System.out.println("Failed to search");
 			}
 		});
