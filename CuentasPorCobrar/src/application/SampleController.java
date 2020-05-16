@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -26,8 +28,16 @@ public class SampleController {
 	
 	AccountsReceivableApp ara = new AccountsReceivableApp();
 	
+	@FXML
+	private GridPane allAccounts;
+	
+	@FXML
+	private GridPane outdatedAccounts;
+	
 	public void initialize() {
 		ara.load();
+		showNoPaidAccounts();
+		showOutdatedAccounts();
 	}
 	
 	public void updateAccount() {
@@ -73,15 +83,15 @@ public class SampleController {
 
 		TextField accountValue = new TextField();
 		accountValue.setMaxWidth(200);
-		double av = Double.parseDouble(accountValue.getText());
+		
 		
 		TextField iva = new TextField();
 		iva.setMaxWidth(200);
-		double iv = Double.parseDouble(iva.getText());
+		
 		
 		TextField interest = new TextField();
 		interest.setMaxWidth(200);
-		double inte = Double.parseDouble(interest.getText());
+		
 		
 		TextField paymentType = new TextField();
 		paymentType.setMaxWidth(200);
@@ -96,20 +106,25 @@ public class SampleController {
 		accept.setOnAction(event -> {
 
 			try {
-				
+				System.out.println(dueDate.getValue()+"");
+				double av = Double.parseDouble(accountValue.getText());
+				double iv = Double.parseDouble(iva.getText());
+				double inte = Double.parseDouble(interest.getText());
 				LocalDate ld = dueDate.getValue();
 				String stringDate = ld+"";
 				String[] arraydate = stringDate.split("-");
 				Date auxDate = new Date();
 				int day = Integer.parseInt(arraydate[2]);
-				int month = Integer.parseInt(arraydate[2]);
-				int year = Integer.parseInt(arraydate[2]);
+				int month = Integer.parseInt(arraydate[1]);
+				int year = Integer.parseInt(arraydate[0]);
 				auxDate.setDate(day);
-				auxDate.setMonth(month);;
-				auxDate.setYear(year);;
+				auxDate.setMonth(month-1);;
+				auxDate.setYear(year-1900);;
 				
 				
 				ara.createAccount(clientId.getText(), date, description.getText(), id.getText(), auxDate, av, iv, inte, paymentType.getText());
+				showNoPaidAccounts();
+				showOutdatedAccounts();
 				newWindow.close();
 			} catch (Exception e2) {
 				System.out.println("Failed to Create");
@@ -170,12 +185,12 @@ public class SampleController {
 		Button search = new Button("Search");
 		
 		Stage newWindow = new Stage();
-		Button accept = new Button();
-		accept.setText("Accept");
-		accept.setOnAction(event -> {
+		
+		search.setText("Accept");
+		search.setOnAction(event -> {
 
 			try {
-				
+				ara.getAccountsNoPaid().get(ara.searchAccount(client, searchField.getText()));
 				newWindow.close();
 			} catch (Exception e2) {
 				System.out.println("Failed to register");
@@ -210,27 +225,43 @@ public class SampleController {
 	}
 	
 	public void showOutdatedAccounts() {
-		
+		outdatedAccounts.getChildren().clear();
+		GridPane gp = new GridPane();
+		ArrayList<Account> a = ara.getOutDateAccounts();
+		for(int i = 0; i < a.size(); i++) {
+			Label l = new Label("Generation Date: " + a.get(i).getGenerationDate() +
+								"\nID: " + a.get(i).getId() +
+								"\nDue Date: " + a.get(i).getDueDate() +
+								"\nAccount Value: " + a.get(i).getAccountValue() +
+								"\nIVA: " + a.get(i).getIva() +
+								"\nPayment Type: " + a.get(i).getPaymentType() +
+								"\nDescription: " + a.get(i).getDescription() +
+								"\n-----------------------------------------------------"+"\n "+"\n ");
+			gp.add(l, 0, (i));
+		}
+		outdatedAccounts.add(gp, 0, 0);
 	}
 	
 	public void showNoPaidAccounts() {
+		allAccounts.getChildren().clear();
+		GridPane gp = new GridPane();
 		ArrayList<Account> a = ara.getAccountsNoPaid();
 		for(int i = 0; i < a.size(); i++) {
 			Label l = new Label("Generation Date: " + a.get(i).getGenerationDate() +
-								"ID: " + a.get(i).getId() +
-								"");
+								"\nID: " + a.get(i).getId() +
+								"\nDue Date: " + a.get(i).getDueDate() +
+								"\nAccount Value: " + a.get(i).getAccountValue() +
+								"\nIVA: " + a.get(i).getIva() +
+								"\nPayment Type: " + a.get(i).getPaymentType() +
+								"\nDescription: " + a.get(i).getDescription() +
+								"\n-----------------------------------------------------"+"\n "+"\n ");
+			gp.add(l, 0, i);
 		}
+		allAccounts.add(gp, 0, 0);
 	}
+
 	
-	public void sortAccountsByDueDate() {
-		
-	}
-	
-	public void sortAccountsByType() {
-		
-	}
-	
-	public void showBills() {
+	public void deleteAccount() {
 		
 	}
 	

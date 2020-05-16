@@ -31,7 +31,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 
 
-public class AccountsReceivableApp {
+public class AccountsReceivableApp implements Serializable{
 	
 	private Hashtable<String,Client> clients;
 	
