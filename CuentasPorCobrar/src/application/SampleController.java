@@ -123,8 +123,6 @@ public class SampleController {
 		
 		Label liva = new Label("IVA");
 		
-		Label linterest = new Label("Interest");
-		
 		Label lpaymentType = new Label("Payment Type");
 		
 		Label ldescription = new Label("Description");
@@ -154,10 +152,6 @@ public class SampleController {
 		iva.setMaxWidth(200);
 		
 		
-		TextField interest = new TextField();
-		interest.setMaxWidth(200);
-		
-		
 		TextField paymentType = new TextField();
 		paymentType.setMaxWidth(200);
 		
@@ -174,7 +168,7 @@ public class SampleController {
 				System.out.println(dueDate.getValue()+"");
 				double av = Double.parseDouble(accountValue.getText());
 				double iv = Double.parseDouble(iva.getText());
-				double inte = Double.parseDouble(interest.getText());
+				
 				LocalDate ld = dueDate.getValue();
 				String stringDate = ld+"";
 				String[] arraydate = stringDate.split("-");
@@ -187,7 +181,7 @@ public class SampleController {
 				auxDate.setYear(year-1900);;
 				
 				
-				ara.createAccount(clientId.getText(), date, description.getText(), id.getText(), auxDate, av, iv, inte, paymentType.getText());
+				ara.createAccount(clientId.getText(), date, description.getText(), id.getText(), auxDate, av, iv, paymentType.getText());
 				showNoPaidAccounts();
 				showOutdatedAccounts();
 				newWindow.close();
@@ -225,14 +219,12 @@ public class SampleController {
 		grid.add(accountValue, 1, 4);
 		grid.add(liva, 0, 5);
 		grid.add(iva, 1, 5);
-		grid.add(linterest, 0, 6);
-		grid.add(interest, 1, 6);
-		grid.add(lpaymentType, 0, 7);
-		grid.add(paymentType, 1, 7);
-		grid.add(ldescription, 0, 8);
-		grid.add(description, 1, 8);
-		grid.add(accept, 0, 9);
-		grid.add(cancel, 1, 9);
+		grid.add(lpaymentType, 0, 6);
+		grid.add(paymentType, 1, 6);
+		grid.add(ldescription, 0, 7);
+		grid.add(description, 1, 7);
+		grid.add(accept, 0, 8);
+		grid.add(cancel, 1, 8);
 		
 		newWindow.setTitle("Create Account");
 		newWindow.initModality(Modality.APPLICATION_MODAL);
@@ -247,7 +239,7 @@ public class SampleController {
 		Label msg = new Label("Enter the ID of the account:");
 		
 		TextField searchField = new TextField();
-		searchField.setMaxWidth(500);
+		searchField.setMaxWidth(800);
 		searchField.setPromptText("Enter an ID");
 		
 		Button search = new Button("Search");
@@ -436,8 +428,6 @@ public class SampleController {
 		Label lphone = new Label("Phone number");
 		
 		Label ladress = new Label("Adress");
-		
-		Label ltotalToPay = new Label("Total to pay");
 
 		TextField name = new TextField();
 		name.setMaxWidth(200);
@@ -457,9 +447,6 @@ public class SampleController {
 		TextField adress = new TextField();
 		adress.setMaxWidth(200);
 		
-		TextField totalToPay = new TextField();
-		totalToPay.setMaxWidth(200);
-		
 		
 		Stage newWindow = new Stage();
 		Button accept = new Button();
@@ -467,9 +454,8 @@ public class SampleController {
 		accept.setOnAction(event -> {
 
 			try {
-				double totalPay = Double.parseDouble(totalToPay.getText());
 				ara.registerClient(name.getText(), typeDocument.getText(), idDocument.getText(), email.getText()
-				, phone.getText(), adress.getText(), totalPay);
+				, phone.getText(), adress.getText());
 				newWindow.close();
 			} catch (Exception e2) {
 				System.out.println("Failed to register");
@@ -485,7 +471,7 @@ public class SampleController {
 
 		StackPane secondaryLayout = new StackPane();
 		
-		Scene secondScene = new Scene(secondaryLayout, 600, 600);
+		Scene secondScene = new Scene(secondaryLayout, 600, 400);
 
 		Button cancel = new Button();
 		cancel.setText("Cancel");
@@ -506,10 +492,8 @@ public class SampleController {
 		grid.add(phone, 1, 5);
 		grid.add(ladress, 0, 6);
 		grid.add(adress, 1, 6);
-		grid.add(ltotalToPay, 0, 7);
-		grid.add(totalToPay, 1, 7);
-		grid.add(accept, 0, 8);
-		grid.add(cancel, 1, 8);
+		grid.add(accept, 0, 7);
+		grid.add(cancel, 1, 7);
 		
 		newWindow.setTitle("Register Client");
 		newWindow.initModality(Modality.APPLICATION_MODAL);
@@ -576,7 +560,7 @@ public class SampleController {
 
 		StackPane secondaryLayout = new StackPane();
 		
-		Scene secondScene = new Scene(secondaryLayout, 600, 600);
+		Scene secondScene = new Scene(secondaryLayout, 600, 400);
 
 		Button cancel = new Button();
 		cancel.setText("Cancel");
@@ -587,16 +571,16 @@ public class SampleController {
 		secondaryLayout.getChildren().add(grid);
 		grid.add(lname, 0, 0);
 		grid.add(name, 1, 0);
-		grid.add(ltypeDocument, 0, 2);
-		grid.add(typeDocument, 1, 2);
-		grid.add(lidDocument, 0, 3);
-		grid.add(idDocument, 1, 3);
-		grid.add(lemail, 0, 4);
-		grid.add(email, 1, 4);
-		grid.add(lphone, 0, 5);
-		grid.add(phone, 1, 5);
-		grid.add(ladress, 0, 6);
-		grid.add(adress, 1, 6);
+		grid.add(ltypeDocument, 0, 1);
+		grid.add(typeDocument, 1, 1);
+		grid.add(lidDocument, 0, 2);
+		grid.add(idDocument, 1, 2);
+		grid.add(lemail, 0, 3);
+		grid.add(email, 1, 3);
+		grid.add(lphone, 0, 4);
+		grid.add(phone, 1, 4);
+		grid.add(ladress, 0, 5);
+		grid.add(adress, 1, 5);
 		
 		grid.add(accept, 0, 7);
 		grid.add(cancel, 1, 7);
@@ -622,12 +606,13 @@ public class SampleController {
 		Stage newWindow = new Stage();
 		
 		Button cancel = new Button();
-		cancel.setText("Accept");
+		
 		cancel.setOnAction(event -> {
 			newWindow.close();
 		});
 		
 		Button accept = new Button();
+		cancel.setText("Cancel");
 		accept.setText("Search");
 		accept.setOnAction(event -> {
 
@@ -640,9 +625,11 @@ public class SampleController {
 							"\nPhone: " + c.getPhone() +
 							"\nAdress: " + c.getAddress() +
 							"\nTotal to Pay: " + c.getTotalToPay();
+				
 				Label l = new Label(s);
 				grid.getChildren().clear();
 				grid.add(l, 0, 2);
+				cancel.setText("Accept");
 				grid.add(cancel, 0, 3);
 				
 			} catch (Exception e2) {
@@ -664,6 +651,7 @@ public class SampleController {
 		grid.add(msg, 0, 0);
 		grid.add(searchField, 0, 1);
 		grid.add(accept, 1, 1);
+		grid.add(cancel, 2, 1);
 		
 		newWindow.setTitle("Search Client");
 		newWindow.initModality(Modality.APPLICATION_MODAL);

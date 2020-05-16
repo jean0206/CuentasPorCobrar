@@ -24,14 +24,14 @@ public class Account implements Serializable {
 	
 	private boolean paid;
 
-	public Account(Date generationDate,String description, String id, Date dueDate, double accountValue, double iva, double interest,
+	public Account(Date generationDate,String description, String id, Date dueDate, double accountValue, double iva,
 			String paymentType) {
 		super();
 		this.generationDate = generationDate;
 		this.id = id;
 		this.description=description;
 		this.dueDate = dueDate;
-		this.accountValue = accountValue;
+		this.accountValue = accountValue+iva;
 		this.iva = iva;		
 		this.paymentType = paymentType;
 		this.paid = false;

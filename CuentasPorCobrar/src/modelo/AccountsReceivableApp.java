@@ -50,8 +50,7 @@ public class AccountsReceivableApp implements Serializable{
 	 * su key, es su cedula.
 	 */
 	
-	public void registerClient(String name, String typeDocument, String idDocument, String email, String phone, String address,
-			double totalToPay) {
+	public void registerClient(String name, String typeDocument, String idDocument, String email, String phone, String address) {
 		
 		Client newClient= new Client(name,typeDocument,idDocument,email,phone,address);
 		if(clients.get(idDocument)==null) {
@@ -128,10 +127,10 @@ public class AccountsReceivableApp implements Serializable{
 	 * luego agrega la cuenta al arraylist de cuentas por pagar del cliente
 	 */
 	
-	public void createAccount(String clientId,Date generationDate,String description, String id, Date dueDate, double accountValue, double iva, double interest,
+	public void createAccount(String clientId,Date generationDate,String description, String id, Date dueDate, double accountValue, double iva,
 			String paymentType) {
 		Client chosenClient= searchClient(clientId);
-		Account newAccount= new Account(generationDate,description, id, dueDate, accountValue, iva, interest, paymentType);
+		Account newAccount= new Account(generationDate,description, id, dueDate, accountValue, iva, paymentType);
 		chosenClient.getNoPaidAccounts().add(newAccount);
 		clients.put(clientId, chosenClient);
 		createReceivable(chosenClient, id, accountValue, description);
@@ -228,7 +227,7 @@ public class AccountsReceivableApp implements Serializable{
 			int indexAccount=searchAccount( idAccount);
 			Account account= client.getNoPaidAccounts().get(indexAccount);
 			double total=account.getAccountValue()+account.getIva();
-			double paidValue=account.getAccountValue()+account.getIva()-valuePaid;
+			double paidValue=account.getAccountValue()-valuePaid;
 			if(paidValue<0) {
 				JOptionPane.showMessageDialog(null, "The value exceed the account balance");
 				System.out.println("1+1");
@@ -243,6 +242,7 @@ public class AccountsReceivableApp implements Serializable{
 				createQuittance(client, idAccount, total ,paidValue, valuePaid, account.getDescription());
 			}
 			else{
+				
 				account.setAccountValue(paidValue);
 				client.getNoPaidAccounts().set(indexAccount, account);
 				updateClient(clientId, client);
