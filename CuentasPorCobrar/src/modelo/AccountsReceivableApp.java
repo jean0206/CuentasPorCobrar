@@ -56,9 +56,9 @@ public class AccountsReceivableApp implements Serializable{
 		Client newClient= new Client(name,typeDocument,idDocument,email,phone,address);
 		if(clients.get(idDocument)==null) {
 			clients.put(newClient.getIdDocument(), newClient);
-			JOptionPane.showMessageDialog(null,"Se ha creado con exito");
+			JOptionPane.showMessageDialog(null,"Client created successfylly");
 		}else {
-			JOptionPane.showMessageDialog(null,"Usuario ya existe");
+			JOptionPane.showMessageDialog(null,"The client already exists");
 		}
 	}
 	
@@ -116,7 +116,7 @@ public class AccountsReceivableApp implements Serializable{
 		Client foundClient;
 		foundClient=clients.get(id);
 		if(foundClient==null) {
-			JOptionPane.showMessageDialog(null, "Cliente no ha sido encontrado");
+			JOptionPane.showMessageDialog(null, "The client was not found");
 		}
 		return foundClient;
 	}
@@ -146,9 +146,9 @@ public class AccountsReceivableApp implements Serializable{
 	public void updateClient(String id, Client client) {
 		if(clients.get(id)!=null) {
 			clients.put(id, client);	
-			JOptionPane.showMessageDialog(null,"Se actulizó la infromación del cliente");
+			JOptionPane.showMessageDialog(null,"Client data was updated successfully");
 		}else {
-			JOptionPane.showMessageDialog(null,"No se ha encontrado el cliente");
+			JOptionPane.showMessageDialog(null,"The client was not found");
 		}
 	}	
 	
@@ -193,17 +193,18 @@ public class AccountsReceivableApp implements Serializable{
 	 * recibe como parametro un cliente y el id de la cuenta
 	 * que se desea buscar, retorna la posicion de la cuenta
 	 */
-	public int searchAccount(Client client, String idCuenta) {
-		int counter=0;
-		for (int i = 0; i < client.getNoPaidAccounts().size(); i++) {
-			if(client.getNoPaidAccounts().get(i).getId().equals(idCuenta)) {
+	public int searchAccount( String idCuenta) {
+		int counter=-1;
+		for (int i = 0; i < getAccountsNoPaid().size(); i++) {
+			if(getAccountsNoPaid().get(i).getId().equals(idCuenta)) {
 				counter=i;
 			}
 		}
 		return counter;
 	}
 	
-	public void deleteAccount(int indexAccount,ArrayList<Account> accounts) {
+	public void deleteAccount(int indexAccount, String clientId) {
+		ArrayList<Account> accounts = searchClient(clientId).getNoPaidAccounts();
 		accounts.remove(indexAccount);
 		for (int i = indexAccount; i < accounts.size(); i++) {
 			if((i+1)<accounts.size()) {
@@ -224,12 +225,12 @@ public class AccountsReceivableApp implements Serializable{
 	public void paidAccount(String clientId, String  idAccount,double valuePaid) {
 		Client client= searchClient(clientId);
 		if(client!=null) {
-			int indexAccount=searchAccount(client, idAccount);
+			int indexAccount=searchAccount( idAccount);
 			Account account= client.getNoPaidAccounts().get(indexAccount);
 			double total=account.getAccountValue()+account.getIva();
 			double paidValue=account.getAccountValue()+account.getIva()-valuePaid;
 			if(paidValue<0) {
-				JOptionPane.showMessageDialog(null, "El valor sobrepasa el saldo de la cuenta");
+				JOptionPane.showMessageDialog(null, "The value exceed the account balance");
 				System.out.println("1+1");
 			}
 			else if(paidValue==0){
@@ -238,17 +239,18 @@ public class AccountsReceivableApp implements Serializable{
 				client.getNoPaidAccounts().set(indexAccount, account);
 				client.getPaidAccounts().add(account);
 				updateClient(clientId, client);
-				JOptionPane.showMessageDialog(null, "Se ha saldado la cuenta");	
+				JOptionPane.showMessageDialog(null, "The account was payed off");	
 				createQuittance(client, idAccount, total ,paidValue, valuePaid, account.getDescription());
 			}
 			else{
 				account.setAccountValue(paidValue);
 				client.getNoPaidAccounts().set(indexAccount, account);
 				updateClient(clientId, client);
-				JOptionPane.showMessageDialog(null, "Se ha modificado el saldo de la cuenta a: $"+paidValue);
+				JOptionPane.showMessageDialog(null, "The account value was modified to: $"+paidValue);
 				createQuittance(client, idAccount, total ,paidValue, valuePaid, account.getDescription());
 			}
 		}
+		
 		
 	}
 	
@@ -270,23 +272,23 @@ public class AccountsReceivableApp implements Serializable{
 			FileOutputStream filePdf= new FileOutputStream("../CuentasPorCobrar/src/Pagos/"+client.getName()+"_"+idAccount+"_"+numQuit+".pdf");
 			PdfWriter.getInstance(document, filePdf);
 			document.open();
-			Paragraph title= new Paragraph("Nombre de cliente: "+client.getName()+"\n"
-					                      +"Numero de identificacion:"+client.getIdDocument()+"\n"
-					                      +"Numero de cuenta: "+idAccount+"\n"
+			Paragraph title= new Paragraph("Client name: "+client.getName()+"\n"
+					                      +"ID number:"+client.getIdDocument()+"\n"
+					                      +"Account number: "+idAccount+"\n"
 					                      +"\n");
 			document.add(title);
 			PdfPTable table= new PdfPTable(3);
-			table.addCell("FECHA");			
-			table.addCell("DESCRIPCION");
-			table.addCell("TOTAL A PAGAR");
+			table.addCell("DATE");			
+			table.addCell("DESCRIPTION");
+			table.addCell("TOTAL TO PAY");
 			table.addCell(date.toString());			
 			table.addCell(description);
 			table.addCell(""+totalAccount);
 			table.addCell("");			
-			table.addCell("ABONO");
+			table.addCell("PAYMENT");
 			table.addCell(""+paidValue);
 			table.addCell("");			
-			table.addCell("SALDO");
+			table.addCell("BALANCE");
 			table.addCell(""+df.format(balance));
 			
 			document.add(table);
@@ -312,15 +314,15 @@ public class AccountsReceivableApp implements Serializable{
 			FileOutputStream filePdf= new FileOutputStream("../CuentasPorCobrar/src/Cuentas/"+client.getName()+"_"+idAccount+"_"+numQuit+".pdf");
 			PdfWriter.getInstance(document, filePdf);
 			document.open();
-			Paragraph title= new Paragraph("Nombre de cliente: "+client.getName()+"\n"
-					                      +"Numero de identificacion:"+client.getIdDocument()+"\n"
-					                      +"Numero de cuenta: "+idAccount+"\n"
+			Paragraph title= new Paragraph("Client name: "+client.getName()+"\n"
+					                      +"ID number: "+client.getIdDocument()+"\n"
+					                      +"Account number: "+idAccount+"\n"
 					                      +"\n");
 			document.add(title);
 			PdfPTable table= new PdfPTable(3);
-			table.addCell("FECHA");			
-			table.addCell("DESCRIPCION");
-			table.addCell("TOTAL A PAGAR");
+			table.addCell("DATE");			
+			table.addCell("DESCRIPTION");
+			table.addCell("TOTAL TO PAY");
 			table.addCell(date.toString());			
 			table.addCell(description);
 			table.addCell(""+totalAccount);			
@@ -350,27 +352,27 @@ public class AccountsReceivableApp implements Serializable{
 	
 	
 
-	public static void main(String[] args) throws ParseException {
-		AccountsReceivableApp c1= new AccountsReceivableApp();
-		c1.registerClient("Jean Carlos Ortiz", "typeDocument", "1010096896", "email", "phone", "address", 230);
-		Client cli= c1.searchClient("1010096896");
-		Date date1=new Date(120,2,4);
-		System.out.println("Prueba"+date1.toString());
-		Date date2=new Date(120,3,4);		
+//	public static void main(String[] args) throws ParseException {
+//		AccountsReceivableApp c1= new AccountsReceivableApp();
+//		c1.registerClient("Jean Carlos Ortiz", "typeDocument", "1010096896", "email", "phone", "address", 230);
+//		Client cli= c1.searchClient("1010096896");
+//		Date date1=new Date(120,2,4);
+//		System.out.println("Prueba"+date1.toString());
+//		Date date2=new Date(120,3,4);		
 		
 
 //		c1.createAccount("1010096896",date1,"Mercancia vendida sdfdsf sdfsdfsd dfsdfsd dfsdfsdf sdfsdfsdf sdfsdfsdfsd", "1", date2, 10000, 0.19, 0.2, "sdfsd", false);
-		System.out.println(cli.getTotalToPay());
-		System.out.println("Vencidas:"+c1.getOutDateAccounts().size());
-		//c1.paidAccount("1010096896","1",5000.19);		
-		System.out.println(c1.getClients().get("1010096896").getTotalToPay());
+//		System.out.println(cli.getTotalToPay());
+//		System.out.println("Vencidas:"+c1.getOutDateAccounts().size());
+//		c1.paidAccount("1010096896","1",5000.19);		
+//		System.out.println(c1.getClients().get("1010096896").getTotalToPay());
 		
-		System.out.println(cli.getTotalToPay());
-		//c1.createDocument(cli,"1");
+//		System.out.println(cli.getTotalToPay());
+//		c1.createDocument(cli,"1");
 		
 		/*Client c2= new Client("nam2", "typeDocument", "124", "email", "phone", "address");
 		c1.updateClient(c2.getIdDocument(),c2);*/
-		//System.out.println(cli.getName());
-	}
+//		System.out.println(cli.getName());
+//	}
 
 }

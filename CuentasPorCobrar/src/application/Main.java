@@ -13,7 +13,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			Pane root = (Pane) FXMLLoader.load(getClass().getResource("Sample.fxml"));
-			Scene scene = new Scene(root, 1000, 600);
+			Scene scene = new Scene(root, 1000, 800);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setTitle("Accounts Receivable");
 //			primaryStage.getIcons().add(new Image("file:data/logo.jpg"));
