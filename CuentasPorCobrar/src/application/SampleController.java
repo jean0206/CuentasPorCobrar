@@ -70,6 +70,7 @@ public class SampleController {
 				showOutdatedAccounts();
 				newWindow.close();
 			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null,"The account or the client was not found");
 				System.out.println("Failed to pay");
 			}
 		});
@@ -191,6 +192,7 @@ public class SampleController {
 				showOutdatedAccounts();
 				newWindow.close();
 			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null,"The account was not created, please fill all the areas with the correct information");
 				System.out.println("Failed to Create");
 			}
 		});
@@ -258,7 +260,7 @@ public class SampleController {
 			newWindow.close();
 		});
 		
-		search.setText("Accept");
+		search.setText("Search");
 		search.setOnAction(event -> {
 
 			try {
@@ -298,6 +300,7 @@ public class SampleController {
 		grid.add(msg, 0, 0);
 		grid.add(searchField, 0, 1);
 		grid.add(search, 1, 1);
+		grid.add(cancel, 2, 1);
 		
 		newWindow.setTitle("Search Account");
 		newWindow.initModality(Modality.APPLICATION_MODAL);
@@ -335,16 +338,17 @@ public class SampleController {
 
 		ArrayList<Account> a = ara.getAccountsNoPaid();
 		for(int i = 0; i < a.size(); i++) {
-			Label l = new Label("Generation Date: " + a.get(i).getGenerationDate() +
-								"\nID: " + a.get(i).getId() +
-								"\nDue Date: " + a.get(i).getDueDate() +
-								"\nAccount Value: " + a.get(i).getAccountValue() +
-								"\nIVA: " + a.get(i).getIva() +
-								"\nPayment Type: " + a.get(i).getPaymentType() +
-								"\nDescription: " + a.get(i).getDescription() +
-								"\n-----------------------------------------------------");
-			gp.add(l, 0, i);
-			
+			if(!a.get(i).isPaid()) {
+				Label l = new Label("Generation Date: " + a.get(i).getGenerationDate() +
+									"\nID: " + a.get(i).getId() +
+									"\nDue Date: " + a.get(i).getDueDate() +
+									"\nAccount Value: " + a.get(i).getAccountValue() +
+									"\nIVA: " + a.get(i).getIva() +
+									"\nPayment Type: " + a.get(i).getPaymentType() +
+									"\nDescription: " + a.get(i).getDescription() +
+									"\n-----------------------------------------------------");
+				gp.add(l, 0, i);
+			}
 		}
 		allAccounts.add(gp, 0, 0);
 	}
@@ -377,9 +381,10 @@ public class SampleController {
 				ara.deleteAccount(index , clientId.getText());
 				showNoPaidAccounts();
 				showOutdatedAccounts();
-				JOptionPane.showMessageDialog(null, "The account was paid successfully");
+				JOptionPane.showMessageDialog(null, "The account was deleted successfully");
 				newWindow.close();
 			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null,"The account was not found");
 				System.out.println("Failed to pay");
 				
 			}
@@ -468,6 +473,8 @@ public class SampleController {
 				newWindow.close();
 			} catch (Exception e2) {
 				System.out.println("Failed to register");
+				JOptionPane.showMessageDialog(null,"The client was not created, please fill all the areas with the correct information");
+
 			}
 		});
 		
@@ -487,8 +494,8 @@ public class SampleController {
 		});
 
 		secondaryLayout.getChildren().add(grid);
-		grid.add(lname, 0, 0);
-		grid.add(name, 1, 0);
+		grid.add(lname, 0, 1);
+		grid.add(name, 1, 1);
 		grid.add(ltypeDocument, 0, 2);
 		grid.add(typeDocument, 1, 2);
 		grid.add(lidDocument, 0, 3);
@@ -557,6 +564,8 @@ public class SampleController {
 				newWindow.close();
 			} catch (Exception e2) {
 				System.out.println("Failed to update");
+				JOptionPane.showMessageDialog(null,"The client was not found");
+
 			}
 		});
 		
@@ -637,6 +646,7 @@ public class SampleController {
 				grid.add(cancel, 0, 3);
 				
 			} catch (Exception e2) {
+//				JOptionPane.showMessageDialog(null,"The client was not found");
 				System.out.println("Failed to search");
 			}
 		});

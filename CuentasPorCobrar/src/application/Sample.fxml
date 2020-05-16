@@ -22,7 +22,6 @@
         <menus>
           <Menu mnemonicParsing="false" text="Administrate Accounts">
             <items>
-              <MenuItem mnemonicParsing="false" text="Update account" />
                   <MenuItem mnemonicParsing="false" onAction="#createAccount" text="Create account" />
                   <MenuItem mnemonicParsing="false" onAction="#searchAccount" text="Search account" />
                   <MenuItem mnemonicParsing="false" onAction="#deleteAccount" text="Delete Account" />
@@ -33,7 +32,7 @@
           <Menu mnemonicParsing="false" text="Administrate Clients">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#registerClient" text="Register client" />
-                  <MenuItem mnemonicParsing="false" text="Update client" />
+                  <MenuItem mnemonicParsing="false" onAction="#updateClient" text="Update client" />
                   <MenuItem mnemonicParsing="false" onAction="#searchClient" text="Search client" />
             </items>
           </Menu>
@@ -63,7 +62,7 @@
                 <RowConstraints maxHeight="342.3999904632568" minHeight="10.0" percentHeight="90.0" prefHeight="342.3999904632568" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label contentDisplay="CENTER" prefHeight="35.0" prefWidth="316.0" text="  All Accounts" textAlignment="CENTER">
+                  <Label contentDisplay="CENTER" prefHeight="54.0" prefWidth="442.0" text="  All Unpaid Accounts" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold Italic" size="36.0" />
                      </font>
