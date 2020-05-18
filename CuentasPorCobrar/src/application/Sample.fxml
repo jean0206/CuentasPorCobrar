@@ -26,7 +26,6 @@
                   <MenuItem mnemonicParsing="false" onAction="#searchAccount" text="Search account" />
                   <MenuItem mnemonicParsing="false" onAction="#deleteAccount" text="Delete Account" />
                   <MenuItem mnemonicParsing="false" onAction="#payAccount" text="Pay an Account" />
-                  <MenuItem mnemonicParsing="false" onAction="#searchAccount" text="Search Account" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Administrate Clients">
